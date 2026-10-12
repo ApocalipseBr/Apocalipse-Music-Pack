@@ -14,6 +14,8 @@ jobs:
     uses: ./.github/workflows/publish-workshop.yml
     with:
       workshop-id: '3814875472'
+      # Includes lure-station validation/behavior and the persistent Steam runner.
+      radio-ref: '4d0ac709396101ea078f05aee7afc7f567277458'
     secrets:
       STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
       STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
