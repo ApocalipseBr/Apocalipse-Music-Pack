@@ -1,4 +1,7 @@
 build/
 node_modules/
+.libraries/
 __pycache__/
 *.pyc
+.radio-framework/
+.workshop-tools/
