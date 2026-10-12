@@ -345,10 +345,14 @@ run FFmpeg decoding or the radio integration tests. The complete CI gate runs
 `.github/workflows/steam-workshop.yml` runs on PRs, pushes to `master`, and manual
 dispatch, calling the local reusable `publish-workshop.yml`. It fetches real
 LFS audio, runs `git lfs fsck`, and
-checks out `ApocalipseBr/ApocalipseBRRadio` at `master` for the integration tests.
+checks out `ApocalipseBr/ApocalipseBRRadio` at the `radio-ref` revision selected
+in `steam-workshop.yml` for the integration tests. The current pin includes
+lure-station validation/behavior and the persistent Steam runner.
 Set `ABR_RADIO_MOD` locally to a different framework mod root when needed. CI
 uses that variable to avoid depending on the Windows Workshop path. The framework
-checkout intentionally tracks `master` to catch current integration changes.
+checkout uses an explicit commit so CI loads the same framework features as
+local testing; update that pin when adopting newer Radio changes. Other callers
+of the reusable workflow can set `radio-ref` (default `master`).
 Configure the **Tests, build and asset integrity** job as a required PR status
 check for bot merges (GitHub may prefix it with the caller's `workshop` job name).
 Every PR compiles, validates and stages the package. PRs never publish to Steam.
@@ -385,8 +389,9 @@ authenticated Steam session, and skips the restart without retrying the upload.
 The job can finish green even if the item did not update; verify its changenote
 and content separately. Explicit publisher failures still fail the job.
 Remembered Steam login preservation and worker cleanup follow the radio
-publisher's behavior. The shared publisher changes must be available on the
-radio repository's `master` branch before a new music-pack run can use them.
+publisher's behavior. The selected `radio-ref` must be available in the Radio
+repository; CI records its resolved commit and reuses that exact revision for
+publishing.
 
 Build output: `build/Apocalipse [BR] - Music Pack`, including Workshop metadata
 and `Contents/mods/Apocalipse-Music-Pack`. `PZ_BUILD_ROOT` selects another output
