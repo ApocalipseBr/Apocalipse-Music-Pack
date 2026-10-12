@@ -27,7 +27,17 @@ for _, firstModule in ipairs({"AMPRegistry", "AMPStation"}) do
     local station = assert(ABRRadio.music.stations.amp_music)
     assert(#station.songs == expectedSongs, "Songs missing or registered twice")
     assert(#station.talks == 8, "Talks missing or registered twice")
-    assert(#ABRRadio.music.stationIds == 1, "Station registered twice")
+    assert(#ABRRadio.music.stationIds == 2, "Stations missing or registered twice")
+    local lure = assert(ABRRadio.music.stations.amp_lure)
+    assert(lure.frequency == 94400 and lure.attractZombies == true)
+    assert(station.attractZombies ~= true, "Normal station attracts zombies")
+    assert(#lure.songs == expectedSongs and #lure.talks == 8)
+    assert(lure.name.EN == MusicTranslationCatalog.IGUI_AMP_LureStationName_EN)
+    for i, song in ipairs(station.songs) do
+        local copy = lure.songs[i]
+        assert(copy.id ~= song.id and copy.station == lure.id and copy.sound == song.sound)
+        assert(copy.duration == song.duration and ABRRadio.music.content[copy.id] == copy)
+    end
     assert(station.name.EN == "Apocalipse Music", "Untranslated station name")
     assert(station.name.PTBR == MusicTranslationCatalog.IGUI_AMP_StationName_PTBR)
     for _, talk in ipairs(station.talks) do

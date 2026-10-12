@@ -18,6 +18,12 @@ assert(station.name.PTBR == "IGUI_AMP_StationName_PTBR")
 assert(station.talkChance >= 0 and station.talkChance <= 100)
 assert(#station.songs == 0, "Station should not load the generated catalog implicitly")
 assert(#station.talks > 0, "Pack has no announcer content")
+local lure = assert(music.stations.amp_lure)
+assert(lure.frequency == 94400 and lure.attractZombies == true)
+assert(station.attractZombies == nil and #lure.talks == #station.talks)
+assert(not pcall(ABRRadio.registerMusicStation,
+    { id = "invalid_attraction", frequency = 95100, attractZombies = "true" }),
+    "Non-boolean attraction flag accepted")
 for _, talk in ipairs(station.talks) do
     assert(talk.station == station.id and talk.kind == "talk")
     assert(talk.duration > 0 and talk.weight > 0)

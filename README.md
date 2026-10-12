@@ -39,6 +39,19 @@ branches from the replacement `master` before submitting further changes.
 
 ## Files
 
+The pack registers two music stations: `amp_music` at **94.2 FM** and
+`amp_lure` (Apocalipse Music - Zombie Lure) at **94.4 FM**. Both use the same
+audio library and between-song talk, with independent playback and queues.
+The lure station enables the radio framework's `attractZombies = true` parameter.
+It needs an ApocalipseBRRadio build containing the zombie attraction module.
+At full volume, loaded speakers draw zombies within 100 tiles using the vanilla
+siren's AI sound strength (60); half volume reduces those values to 50 and 30.
+Placed, vehicle, and equipped radios are supported. Headphones on equipped
+radios, muted/off receivers, and talk or song breaks generate no extra lure noise.
+AI sounds are emitted by the server once per second, independently of listeners.
+For RCON requests, select `amp_lure` and use the same script sound name as on
+`amp_music`; lure catalog IDs use the separate `amp_lure_<hash>` prefix.
+
 `.libraries/` is an optional local Umbrella checkout containing Lua API type
 stubs for editor completion and type checking. VS Code references it through
 `.vscode/settings.json`. It is ignored by Git and is not needed by CI, tests,
@@ -46,7 +59,7 @@ or Workshop builds. Keep your local copy if you use those editor features.
 
 - `Apocalipse-Music-Pack/42/mod.info`: B42 metadata and radio dependency.
 - `Apocalipse-Music-Pack/common/media/lua/shared/ApocalipseMusic/AMPStation.lua`:
-  station name/frequency (94.2 FM), color, talk probability, and talk variants.
+  station names/frequencies (94.2 and 94.4 FM), color, attraction, and talk variants.
 - `.../AMPRegistry.lua`: generated song catalog; requires `AMPStation` before
   registering songs. `AMPStation` must not require the registry back, because the
   game can scan the registry first. The generator preserves this dependency.
@@ -353,9 +366,27 @@ Use runner labels `[self-hosted, Linux, X64, pz-workshop]`, with Python 3, GitHu
 CLI and Docker available, and the same organization secrets as the radio:
 `STEAM_USERNAME`, `STEAM_CONFIG_VDF`, `STEAM_SESSION_GITHUB_TOKEN`, optional
 `STEAM_PASSWORD`, and optional `PZMANAGER_RESTART_URL` / `PZMANAGER_MOD_UPDATE_TOKEN`.
-Grant this repository access to those secrets. Successful uploads can trigger
-the existing restart integration; remembered Steam login preservation and worker
-cleanup follow the radio publisher's behavior.
+Grant this repository access to those secrets. Confirmed publications can trigger
+the existing restart integration. Publishing uses the radio repository's shared
+`scripts/workshop/run_publisher.py` wrapper. It retains private login/device state
+under `~/.local/state/apocalipse-steam/` and prefers the latest runner config over
+the organization secret captured when the workflow was queued. The secret seeds
+missing state and receives a backup after confirmed authentication.
+The account lock covers both upload and secret backup. Radio and Music Pack
+share it when using the same Linux host, service user, and Steam account (or the
+same `STEAM_STATE_ROOT` directory); separate hosts are not coordinated.
+Fresh upload logs produce safe commit-error/result-code diagnostics, while raw
+Steam logs stay private on the runner. Cleanup retains login state, and
+timeout/cancellation stops the container before releasing its lock.
+If the shared radio publisher returns status
+`2` (upload attempted but publication unconfirmed), the workflow records
+`publication=unconfirmed`, shows a warning and job summary, preserves the
+authenticated Steam session, and skips the restart without retrying the upload.
+The job can finish green even if the item did not update; verify its changenote
+and content separately. Explicit publisher failures still fail the job.
+Remembered Steam login preservation and worker cleanup follow the radio
+publisher's behavior. The shared publisher changes must be available on the
+radio repository's `master` branch before a new music-pack run can use them.
 
 Build output: `build/Apocalipse [BR] - Music Pack`, including Workshop metadata
 and `Contents/mods/Apocalipse-Music-Pack`. `PZ_BUILD_ROOT` selects another output

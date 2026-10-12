@@ -26,7 +26,7 @@ for (const [key, value] of Object.entries(catalogs[0])) {
     lua.lua_setfield(state, -2, to_luastring(key));
 }
 lua.lua_setglobal(state, to_luastring('MusicTranslationCatalog'));
-lua.lua_pushinteger(state, (registry.match(/ABRRadio\.registerSong\(/g) || []).length);
+lua.lua_pushinteger(state, (registry.match(/id = "amp_song_/g) || []).length);
 lua.lua_setglobal(state, to_luastring('ExpectedMusicSongCount'));
 if (lauxlib.luaL_dofile(state, to_luastring('tests/startup_spec.lua')) !== lua.LUA_OK) {
     throw new Error(to_jsstring(lua.lua_tostring(state, -1)));
