@@ -1,0 +1,17 @@
+[h1]Apocalipse Music Pack - Build 42[/h1]
+
+Adds a new music radio station at [b]94.2 FM[/b] for the [b]ApocalipseBRRadio framework[/b] in Project Zomboid Build 42.
+
+This mod is a station and music content pack. ApocalipseBRRadio provides radio playback, multiplayer synchronization, and broadcast scheduling.
+
+[h2]Included content[/h2]
+[list]
+[*]1,139 music tracks and their generated sound definitions and song catalog.
+[*]A dedicated music station at 94.2 FM.
+[*]Short radio talk segments between songs, with English and Brazilian Portuguese text.
+[/list]
+
+The music files are stored directly in common/media/sound. The station and song catalog are registered through shared Lua files, with sound definitions in common/media/scripts.
+
+[h2]Requirements and listening[/h2]
+Subscribe to and enable [b]ApocalipseBRRadio[/b] (mod ID: apocalipsebrradio) together with [b]Apocalipse Music Pack[/b]. Tune a working radio to [b]94.2 FM[/b] to listen.

@@ -1,0 +1,23 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Konijima/project-zomboid-studio/master/pzstudio.schema.json",
+    "title": "Apocalipse [BR] - Music Pack",
+    "authors": [],
+    "workshop": {
+        "visibility": "public",
+        "id": 3814875472,
+        "tags": [
+            "Build 42",
+            "Audio",
+            "Multiplayer",
+            "Misc",
+            "Silly/Fun"
+        ],
+        "excludes": []
+    },
+    "mods": {
+        "Apocalipse-Music-Pack": {
+            "name": "Apocalipse-Music-Pack",
+            "description": "Music radio catalog with compact playback commands, timed local lyrics, and mid-song joining through audio chunks. Requires apocalipsebrradio."
+        }
+    }
+}
