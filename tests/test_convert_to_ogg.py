@@ -55,6 +55,25 @@ class ConverterTests(unittest.TestCase):
         self.assertLess(output.stat().st_size, len(original))
         self.assertEqual(self.source.read_bytes(), original)
 
+    def test_backend_conversion_then_registry_generation(self):
+        registry_path = SCRIPT.parents[1] / "Apocalipse-Music-Pack/tools/generate_amp_registry.py"
+        registry_spec = importlib.util.spec_from_file_location("amp_pipeline_generator", registry_path)
+        registry_generator = importlib.util.module_from_spec(registry_spec)
+        registry_spec.loader.exec_module(registry_generator)
+        assets = self.folder / "mod/common/media/sound"
+        output = assets / "Bot Artist - New, track.ogg"
+        result = self.cli(self.source, "-o", output)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.inspect(output)
+        self.assertAlmostEqual(registry_generator.ogg_vorbis_duration(output, verify_crc=True), 1, places=2)
+        with mock.patch.object(registry_generator, "SOUND_ROOT", assets), \
+                mock.patch.object(registry_generator, "SOUND_SCRIPT", self.folder / "sounds.txt"), \
+                mock.patch.object(registry_generator, "LUA_REGISTRY", self.folder / "registry.lua"), \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(registry_generator.main([]), 0)
+            self.assertEqual(registry_generator.main(["--check"]), 0)
+            self.assertEqual(len(registry_generator.collect_entries()), 1)
+
     def test_mp3_custom_output_and_overwrite(self):
         mp3 = self.folder / "song.mp3"
         converter.run([self.ffmpeg, "-v", "error", "-i", str(self.source), str(mp3)])

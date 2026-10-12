@@ -3,8 +3,8 @@
 This is a content pack: station registration, independent song modules, audio
 assets, timed lyrics, and generic between-song radio talk. Playback, synchronization,
 and channel scheduling belong to ApocalipseBRRadio v2.1.0 or newer. This pack
-depends on `apocalipsebrradio`. No music files are included yet; the
-station stays silent until you register at least one song.
+depends on `apocalipsebrradio`. The whole-file music library and its generated
+sound definitions and song catalog are included through Git LFS.
 
 ## Audio storage and pull requests
 
@@ -277,20 +277,96 @@ client controllers support all stations in the registry.
 ## Build and verify
 
 ```powershell
+npm ci
 npm test
 npm run build
+npm run test:build
 ```
 
-Build output: `build/Contents/mods/Apocalipse-Music-Pack`. Copy that mod folder
+`npm test` runs the Python tool tests, integrity checks for every current track,
+the maintained radio simulation, pack registration contracts, and both catalog
+startup orders. `npm run build` then compiles the actual Workshop package with
+the pinned PZ Studio 2.2.0 builder. `npm run test:build` verifies Workshop metadata,
+B42 metadata, the radio dependency, every packaged asset against its source bytes,
+and startup using the actual compiled catalog.
+Python 3.12 and Node.js 22 are used in CI. FFmpeg must be on PATH or available
+through the converter's automatic cache setup. `npm ci` installs the locked
+Fengari test dependencies.
+
+The integrity gate discovers tracks recursively, so adding songs needs no count
+updates or test allowlists. It checks all Ogg page checksums, stream boundaries,
+sequence numbers, Vorbis durations, and full FFmpeg decoding. It verifies exact
+generated sound/catalog contents, unique stable IDs, parser-safe clip paths,
+byte-identical filename aliases, and missing/orphan aliases. LFS pointers,
+interrupted conversions, and unconverted source audio fail validation. Text
+comparisons accept platform line-ending differences. This covers asset and
+catalog integrity; FMOD and in-game playback still need the checks below.
+
+For an automated backend import, convert the new audio, regenerate the catalog,
+then validate before committing the new branch or creating its PR:
+
+```powershell
+python tools/convert_to_ogg.py "path/to/new-song.mp3" --mod-assets
+python Apocalipse-Music-Pack/tools/generate_amp_registry.py
+npm test
+npm run build
+npm run test:build
+```
+
+Commit the new LFS audio, `ApocalipseMusic_Sounds.txt`, `AMPRegistry.lua`, and any
+new `common/media/sound/AMPAssets` aliases together. Remove obsolete aliases after
+deleting or renaming tracks. The generator validates the entire batch before
+writing any outputs or aliases; unchanged aliases are compared by contents.
+
+`npm run check:assets` (or the generator's `--check`) offers a read-only catalog,
+Ogg checksum and alias check with a nonzero exit status on failure. It does not
+run FFmpeg decoding or the radio integration tests. The complete CI gate runs
+`npm test`, `npm run build`, and `npm run test:build`. Individual source suites are
+`npm run test:python`, `npm run test:lua`, and `npm run test:startup`.
+
+`.github/workflows/steam-workshop.yml` runs on PRs, pushes to `master`, and manual
+dispatch, calling the local reusable `publish-workshop.yml`. It fetches real
+LFS audio, runs `git lfs fsck`, and
+checks out `ApocalipseBr/ApocalipseBRRadio` at `master` for the integration tests.
+Set `ABR_RADIO_MOD` locally to a different framework mod root when needed. CI
+uses that variable to avoid depending on the Windows Workshop path. The framework
+checkout intentionally tracks `master` to catch current integration changes.
+Configure the **Tests, build and asset integrity** job as a required PR status
+check for bot merges (GitHub may prefix it with the caller's `workshop` job name).
+Every PR compiles, validates and stages the package. PRs never publish to Steam.
+
+The publishing flow follows the radio repository's workflow structure. The
+hosted Ubuntu job builds and validates `Contents/mods`, `preview.png`, and
+`workshop.txt`, then uses the radio's staging tool to produce `workshop-package`.
+On a `master` push or a manual dispatch on `master`, the dedicated worker downloads
+that exact artifact and uploads it to the existing Workshop item `3814875472`.
+It does not rebuild. The framework/publishing tool commit tested in CI is also
+pinned for the worker. Radio publisher regression tests and a Docker build run
+on Ubuntu before the artifact is accepted.
+
+Use runner labels `[self-hosted, Linux, X64, pz-workshop]`, with Python 3, GitHub
+CLI and Docker available, and the same organization secrets as the radio:
+`STEAM_USERNAME`, `STEAM_CONFIG_VDF`, `STEAM_SESSION_GITHUB_TOKEN`, optional
+`STEAM_PASSWORD`, and optional `PZMANAGER_RESTART_URL` / `PZMANAGER_MOD_UPDATE_TOKEN`.
+Grant this repository access to those secrets. Successful uploads can trigger
+the existing restart integration; remembered Steam login preservation and worker
+cleanup follow the radio publisher's behavior.
+
+Build output: `build/Apocalipse [BR] - Music Pack`, including Workshop metadata
+and `Contents/mods/Apocalipse-Music-Pack`. `PZ_BUILD_ROOT` selects another output
+root in CI; local builds do not change the user's global `.pzstudio` setting.
+The wrapper uses PZ Studio's actual builder and its built-in replacement of prior
+output, so builds also work on a fresh checkout. Copy the compiled mod folder
 into your B42 mods directory alongside ApocalipseBRRadio, enable both, and tune
 an equipped/world/vehicle radio to 94.2 FM. The build script preserves the B42
-layout instead of using the template's former B41 PZ Studio packager.
+layout and the project's required radio dependency.
 
-The Lua tests load the actual ApocalipseBRRadio source through Fengari and
-simulate registry/protocol behavior, channel ownership, deferred message order,
-scheduled transmission fairness, independent frequencies,
-lyrics and gaps, duplicate/stale packets, late joining, retuning, muting, range,
-deafness, lost signal, and song/talk scheduling. They do not exercise Kahlua,
+The Lua checks run the radio repository's maintained `tests/music_spec.lua`
+simulation through Fengari, plus this pack's registration and startup checks.
+This keeps playback/protocol tests aligned with the actual framework rather than
+duplicating obsolete AMP1/lyric behavior (the current framework uses AMP2).
+The tests cover receiver lifecycle, channel arbitration, heartbeat expiry,
+microphone restoration and discovery budgets. They do not exercise Kahlua,
 Java interop, FMOD playback, split-screen audio isolation, or multiplayer latency.
 Before publishing, verify those in-game, including a second client tuning in
 mid-song, battery/power loss, moving away from a world radio, and song transitions.

@@ -1,9 +1,19 @@
 {
   "scripts": {
     "clean": "node tools/build.mjs --clean",
-    "build": "pzstudio clean && pzstudio build",
+    "build": "node tools/build.mjs",
     "update": "pzstudio update",
     "import:music": "node tools/import-song.mjs",
-    "test": "npm exec --yes --package=fengari-node-cli -- fengari tests/run.lua"
+    "test": "npm run test:python && npm run test:lua && npm run test:startup",
+    "test:python": "python -m unittest discover -s tests -p test_*.py -v",
+    "test:lua": "node tests/framework_spec.js && fengari tests/run.lua",
+    "test:startup": "node tests/startup_spec.js",
+    "test:build": "python tools/validate_build.py",
+    "check:assets": "python Apocalipse-Music-Pack/tools/generate_amp_registry.py --check"
+  },
+  "devDependencies": {
+    "fengari": "0.1.5",
+    "fengari-node-cli": "0.1.0",
+    "pzstudio": "2.2.0"
   }
 }

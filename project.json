@@ -17,6 +17,8 @@
     "mods": {
         "Apocalipse-Music-Pack": {
             "name": "Apocalipse-Music-Pack",
+            "require": "apocalipsebrradio",
+            "versionMin": "42.0.0",
             "description": "Music radio catalog with compact playback commands, timed local lyrics, and mid-song joining through audio chunks. Requires apocalipsebrradio."
         }
     }
