@@ -10030,6 +10030,15 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_478f3a63d7a4",
+    station = station,
+    sound = "AMP_478F3A63D7A42229",
+    duration = 227,
+    artist = "Skillex ft Korn",
+    title = "Get Up",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_b18b0e01898e",
     station = station,
     sound = "AMP_B18B0E01898E63A1",
