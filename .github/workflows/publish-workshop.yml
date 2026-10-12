@@ -41,6 +41,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
+          submodules: false
           persist-credentials: false
       # A separate checkout makes this workflow reusable from another mod repository.
       - name: Check out publishing tools

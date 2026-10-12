@@ -39,6 +39,11 @@ branches from the replacement `master` before submitting further changes.
 
 ## Files
 
+`.libraries/` is an optional local Umbrella checkout containing Lua API type
+stubs for editor completion and type checking. VS Code references it through
+`.vscode/settings.json`. It is ignored by Git and is not needed by CI, tests,
+or Workshop builds. Keep your local copy if you use those editor features.
+
 - `Apocalipse-Music-Pack/42/mod.info`: B42 metadata and radio dependency.
 - `Apocalipse-Music-Pack/common/media/lua/shared/ApocalipseMusic/AMPStation.lua`:
   station name/frequency (94.2 FM), color, talk probability, and talk variants.
