@@ -10254,6 +10254,15 @@ ABRRadio.registerSong({
     title = "Raptor",
 })
 
+-- Share audio assets, but keep separate wire IDs and playlists.
+for _, song in ipairs(ABRRadio.music.stations[station].songs) do
+    local lureSong = {}
+    for key, value in pairs(song) do lureSong[key] = value end
+    lureSong.id = song.id:gsub("^amp_song_", "amp_lure_")
+    lureSong.station = "amp_lure"
+    ABRRadio.registerSong(lureSong)
+end
+
 local registeredStation = ABRRadio.music.stations[station]
 print("[Apocalipse Music Pack] Catalog registration complete: "
     .. ABRRadio.resolveText(registeredStation.name) .. " [" .. station .. "] @ "
