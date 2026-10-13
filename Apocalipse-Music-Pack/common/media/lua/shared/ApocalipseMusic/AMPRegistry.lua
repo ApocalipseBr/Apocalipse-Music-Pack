@@ -10048,6 +10048,15 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_0adaa4dcbdf5",
+    station = station,
+    sound = "AMP_0ADAA4DCBDF560FD",
+    duration = 310,
+    artist = "Racionais",
+    title = "Fórmula Mágica da Paz",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_87fa8b460c91",
     station = station,
     sound = "AMP_87FA8B460C914BA8",
@@ -10072,6 +10081,24 @@ ABRRadio.registerSong({
     duration = 227,
     artist = "Skillex ft Korn",
     title = "Get Up",
+})
+
+ABRRadio.registerSong({
+    id = "amp_song_3213b9cd369a",
+    station = station,
+    sound = "AMP_3213B9CD369AB28F",
+    duration = 291,
+    artist = "GOD",
+    title = "The reason opposites attract",
+})
+
+ABRRadio.registerSong({
+    id = "amp_song_a92ace7a299a",
+    station = station,
+    sound = "AMP_A92ACE7A299AA918",
+    duration = 257,
+    artist = "Tim Maia",
+    title = "Gostava Tanto De Você",
 })
 
 ABRRadio.registerSong({
