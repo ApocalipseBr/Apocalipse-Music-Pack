@@ -10039,6 +10039,15 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_7b3ed92971ea",
+    station = station,
+    sound = "AMP_7B3ED92971EACC78",
+    duration = 206,
+    artist = "Moriá Art",
+    title = "Fio Escarlate",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_b18b0e01898e",
     station = station,
     sound = "AMP_B18B0E01898E63A1",
