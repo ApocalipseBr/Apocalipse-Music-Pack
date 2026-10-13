@@ -9,6 +9,12 @@ on:
 permissions:
   contents: read
 
+# Queue the entire build/publish flow, so older builds cannot reach Steam later.
+# Keep one active run and replace any pending publisher with the newest run.
+concurrency:
+  group: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && 'music-pack-master-publish' || format('music-pack-ci-{0}', github.run_id) }}
+  cancel-in-progress: false
+
 jobs:
   workshop:
     uses: ./.github/workflows/publish-workshop.yml

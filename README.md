@@ -356,6 +356,10 @@ of the reusable workflow can set `radio-ref` (default `master`).
 Configure the **Tests, build and asset integrity** job as a required PR status
 check for bot merges (GitHub may prefix it with the caller's `workshop` job name).
 Every PR compiles, validates and stages the package. PRs never publish to Steam.
+Master pushes and manual dispatches on master share a workflow-level concurrency
+group covering the entire build/publish flow. One active run finishes; each new
+run cancels and replaces the previous pending run, retaining only the latest
+pending publication. PRs and dispatches on other branches use separate groups.
 
 The publishing flow follows the radio repository's workflow structure. The
 hosted Ubuntu job builds and validates `Contents/mods`, `preview.png`, and
