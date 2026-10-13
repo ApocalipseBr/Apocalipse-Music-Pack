@@ -10102,6 +10102,15 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_01a5d544619d",
+    station = station,
+    sound = "AMP_01A5D544619D24C1",
+    duration = 215,
+    artist = "Gino e Geno",
+    title = "pinga na garganta",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_7b3ed92971ea",
     station = station,
     sound = "AMP_7B3ED92971EACC78",
