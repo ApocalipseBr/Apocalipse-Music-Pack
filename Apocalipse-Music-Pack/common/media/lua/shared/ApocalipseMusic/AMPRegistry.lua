@@ -10030,6 +10030,15 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_87fa8b460c91",
+    station = station,
+    sound = "AMP_87FA8B460C914BA8",
+    duration = 321,
+    artist = "Eminem",
+    title = "My Darling",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_478f3a63d7a4",
     station = station,
     sound = "AMP_478F3A63D7A42229",
