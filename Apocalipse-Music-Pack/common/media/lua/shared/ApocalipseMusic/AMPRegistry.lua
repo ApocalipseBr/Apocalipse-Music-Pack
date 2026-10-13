@@ -10030,6 +10030,24 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_4d352ac0bb9c",
+    station = station,
+    sound = "AMP_4D352AC0BB9C3E10",
+    duration = 438,
+    artist = "Iron Maiden",
+    title = "Fear of The Dark",
+})
+
+ABRRadio.registerSong({
+    id = "amp_song_df47affbcc06",
+    station = station,
+    sound = "AMP_DF47AFFBCC0639F9",
+    duration = 432,
+    artist = "Iron Maiden",
+    title = "Hallowed Be Thy Name",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_87fa8b460c91",
     station = station,
     sound = "AMP_87FA8B460C914BA8",
