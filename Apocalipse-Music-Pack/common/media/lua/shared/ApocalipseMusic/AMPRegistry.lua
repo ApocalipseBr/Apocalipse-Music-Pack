@@ -10030,6 +10030,33 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_87fa8b460c91",
+    station = station,
+    sound = "AMP_87FA8B460C914BA8",
+    duration = 321,
+    artist = "Eminem",
+    title = "My Darling",
+})
+
+ABRRadio.registerSong({
+    id = "amp_song_478f3a63d7a4",
+    station = station,
+    sound = "AMP_478F3A63D7A42229",
+    duration = 227,
+    artist = "Skillex ft Korn",
+    title = "Get Up",
+})
+
+ABRRadio.registerSong({
+    id = "amp_song_7b3ed92971ea",
+    station = station,
+    sound = "AMP_7B3ED92971EACC78",
+    duration = 206,
+    artist = "Moriá Art",
+    title = "Fio Escarlate",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_b18b0e01898e",
     station = station,
     sound = "AMP_B18B0E01898E63A1",
