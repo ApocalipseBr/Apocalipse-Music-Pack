@@ -10039,6 +10039,15 @@ ABRRadio.registerSong({
 })
 
 ABRRadio.registerSong({
+    id = "amp_song_875436b32966",
+    station = station,
+    sound = "AMP_875436B32966AE8F",
+    duration = 234,
+    artist = "Avenged Sevenfold",
+    title = "Almost Easy",
+})
+
+ABRRadio.registerSong({
     id = "amp_song_478f3a63d7a4",
     station = station,
     sound = "AMP_478F3A63D7A42229",
